@@ -1,41 +1,41 @@
 import React from 'react';
 import './App.css';
 import NavigationBar from './components/layout/NavigationBar';
-import UserItem from './components/users/UserItem';
-import userStyles from './components/users/styles';
+import Users from './components/users/Users';
 import axios from 'axios';
 
 class App extends React.Component {
   state = {
     users: [],
+    loading: false,
   };
-  async componentDidMount() {
-    await axios.get('https://api.github.com/users').then(response => {
-      let users = [];
-      const { data } = response;
-      if (data.length) {
-        users = data.map(u => ({
-          id: u.id,
-          login: u.login,
-          avatarSrc: u.avatar_url,
-          goToLink: u.html_url,
-        }));
-      }
 
-      this.setState({ users });
-    });
+  async componentDidMount() {
+    this.setState({ loading: true });
+
+    let users = [];
+    const { data } = await axios.get('https://api.github.com/users');
+
+    if (data.length) {
+      users = data.map(user => ({
+        id: user.id,
+        login: user.login,
+        avatarSrc: user.avatar_url,
+        goToLink: user.html_url,
+      }));
+    }
+
+    this.setState({ users, loading: false });
   }
 
   render() {
-    const { users } = this.state;
+    const { users, loading } = this.state;
 
     return (
       <>
         <NavigationBar />
-        <div className='container' style={userStyles.users.grid}>
-          {users.map(user => (
-            <UserItem key={user.id} user={user} />
-          ))}
+        <div className='container'>
+          <Users users={users} loading={loading} />
         </div>
       </>
     );
