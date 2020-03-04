@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 export class Search extends Component {
   state = {
     text: '',
@@ -40,5 +40,11 @@ export class Search extends Component {
     );
   }
 }
+
+Search.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  clearUsers: PropTypes.func.isRequired,
+  showClear: PropTypes.bool.isRequired,
+};
 
 export default Search;
