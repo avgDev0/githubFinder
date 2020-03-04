@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import NavigationBar from './components/layout/NavigationBar';
 import Users from './components/users/Users';
-import axios from 'axios';
+import Search from './components/users/Search';
+import { fetchUsers } from './utils/helpers';
 
 class App extends React.Component {
   state = {
@@ -10,25 +11,15 @@ class App extends React.Component {
     loading: false,
   };
 
-  async componentDidMount() {
+  searchUser = async user => {
     this.setState({ loading: true });
-
-    let users = [];
-    const { data } = await axios.get(
-      `https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`,
-    );
-
-    if (data.length) {
-      users = data.map(user => ({
-        id: user.id,
-        login: user.login,
-        avatarSrc: user.avatar_url,
-        goToLink: user.html_url,
-      }));
-    }
-
+    const users = await fetchUsers(user);
     this.setState({ users, loading: false });
-  }
+  };
+
+  clearUsers = () => {
+    this.setState({ users: [], loading: false });
+  };
 
   render() {
     const { users, loading } = this.state;
@@ -37,6 +28,11 @@ class App extends React.Component {
       <>
         <NavigationBar />
         <div className='container'>
+          <Search
+            onSubmit={this.searchUser}
+            clearUsers={this.clearUsers}
+            showClear={users.length > 0}
+          />
           <Users users={users} loading={loading} />
         </div>
       </>
