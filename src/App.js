@@ -14,7 +14,9 @@ class App extends React.Component {
     this.setState({ loading: true });
 
     let users = [];
-    const { data } = await axios.get('https://api.github.com/users');
+    const { data } = await axios.get(
+      `https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`,
+    );
 
     if (data.length) {
       users = data.map(user => ({

@@ -12,7 +12,7 @@ export const UserItem = ({ user: { login, avatarSrc, goToLink } }) => {
       />
       <h3>{login}</h3>
       <div>
-        <a href={goToLink} className='btn btn-dartk-btn-sm my-1'>
+        <a href={goToLink} className='btn btn-dark btn-sm my-1'>
           More...
         </a>
       </div>
