@@ -5,7 +5,11 @@ import Users from './components/users/Users';
 import User from './components/users/User';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert';
-import { fetchUsers, fetchUserInformation } from './utils/helpers';
+import {
+  fetchUsers,
+  fetchUserInformation,
+  fetchUserRepos,
+} from './utils/helpers';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import About from './components/pages/About';
 
@@ -13,6 +17,7 @@ class App extends React.Component {
   state = {
     users: [],
     user: {},
+    repos: [],
     loading: false,
     alertConfig: null,
   };
@@ -29,6 +34,12 @@ class App extends React.Component {
     this.setState({ user, loading: false });
   };
 
+  getUserRepos = async username => {
+    this.setState({ loading: true });
+    const repos = await fetchUserRepos(username);
+    this.setState({ repos, loading: false });
+  };
+
   clearUsers = () => {
     this.setState({ users: [], loading: false });
   };
@@ -40,7 +51,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { users, user, loading, alertConfig } = this.state;
+    const { users, user, repos, loading, alertConfig } = this.state;
 
     return (
       <Router>
@@ -72,7 +83,9 @@ class App extends React.Component {
                   <User
                     {...props}
                     getUser={this.getUser}
+                    getUserRepos={this.getUserRepos}
                     user={user}
+                    repos={repos}
                     loading={loading}
                   />
                 )}

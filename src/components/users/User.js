@@ -4,10 +4,16 @@ import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import Repos from '../repos/Repos';
 
 export default class User extends Component {
   componentDidMount() {
-    this.props.getUser(this.props.match.params.login);
+    const {
+      params: { login },
+    } = this.props.match;
+
+    this.props.getUser(login);
+    this.props.getUserRepos(login);
   }
 
   render() {
@@ -28,6 +34,7 @@ export default class User extends Component {
         hireable,
       },
       loading,
+      repos,
     } = this.props;
     if (loading) {
       return <Spinner />;
@@ -97,6 +104,7 @@ export default class User extends Component {
           <div className='badge badge-light'>Public Repos: {public_repos}</div>
           <div className='badge badge-dark'>Public Gists: {public_gists}</div>
         </div>
+        <Repos repos={repos} />
       </Fragment>
     );
   }
@@ -105,5 +113,7 @@ export default class User extends Component {
 User.propTypes = {
   loading: PropTypes.bool,
   user: PropTypes.object.isRequired,
+  repos: PropTypes.array.isRequired,
   getUser: PropTypes.func.isRequired,
+  getUserRepos: PropTypes.func.isRequired,
 };
