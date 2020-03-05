@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './App.css';
 import NavigationBar from './components/layout/NavigationBar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert';
 import { fetchUsers } from './utils/helpers';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import About from './components/pages/About';
 
 class App extends React.Component {
   state = {
@@ -33,19 +35,32 @@ class App extends React.Component {
     const { users, loading, alertConfig } = this.state;
 
     return (
-      <>
-        <NavigationBar />
-        <div className='container'>
-          <Alert config={alertConfig} />
-          <Search
-            onSubmit={this.searchUser}
-            clearUsers={this.clearUsers}
-            showClear={users.length > 0}
-            setAlert={this.setAlertConfig}
-          />
-          <Users users={users} loading={loading} />
+      <Router>
+        <div className='App'>
+          <NavigationBar />
+          <div className='container'>
+            <Alert config={alertConfig} />
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={props => (
+                  <Fragment>
+                    <Search
+                      onSubmit={this.searchUser}
+                      clearUsers={this.clearUsers}
+                      showClear={users.length > 0}
+                      setAlert={this.setAlertConfig}
+                    />
+                    <Users users={users} loading={loading} />
+                  </Fragment>
+                )}
+              />
+              <Route exact path='/about' component={About} />
+            </Switch>
+          </div>
         </div>
-      </>
+      </Router>
     );
   }
 }
