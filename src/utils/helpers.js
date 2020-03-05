@@ -1,16 +1,18 @@
 import axios from 'axios';
 
-const buildFetchURL = (user = '') => {
+const buildFetchURL = (user = '', singleUserFetch) => {
   const urlParts = ['users'];
   const params = {
     client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
     client_secret: process.env.REACT_APP_GITHUB_CLIENT_SECRET,
   };
 
-  if (user.length) {
+  if (!singleUserFetch) {
     urlParts.push('search');
     urlParts.reverse();
     params['q'] = user;
+  } else {
+    urlParts.push(user);
   }
 
   const paramsString = Object.entries(params)
@@ -35,4 +37,10 @@ export const fetchUsers = async user => {
   }
 
   return users;
+};
+
+export const fetchUserInformation = async username => {
+  const { data } = await axios.get(buildFetchURL(username, true));
+
+  return data;
 };
