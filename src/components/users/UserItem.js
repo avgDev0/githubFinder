@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-export const UserItem = ({ user: { login, avatarSrc, goToLink } }) => {
+export const UserItem = ({ user: { login, avatarSrc } }) => {
   return (
     <div className='card text-center'>
       <img
@@ -12,9 +13,9 @@ export const UserItem = ({ user: { login, avatarSrc, goToLink } }) => {
       />
       <h3>{login}</h3>
       <div>
-        <a href={goToLink} className='btn btn-dark btn-sm my-1'>
+        <Link to={`/user/${login}`} className='btn btn-dark btn-sm my-1'>
           More...
-        </a>
+        </Link>
       </div>
     </div>
   );
@@ -25,7 +26,6 @@ UserItem.propTypes = {
     id: PropTypes.number.isRequired,
     login: PropTypes.string.isRequired,
     avatarSrc: PropTypes.string.isRequired,
-    goToLink: PropTypes.string.isRequired,
   }).isRequired,
 };
 

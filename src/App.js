@@ -2,23 +2,31 @@ import React, { Fragment } from 'react';
 import './App.css';
 import NavigationBar from './components/layout/NavigationBar';
 import Users from './components/users/Users';
+import User from './components/users/User';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert';
-import { fetchUsers } from './utils/helpers';
+import { fetchUsers, fetchUserInformation } from './utils/helpers';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import About from './components/pages/About';
 
 class App extends React.Component {
   state = {
     users: [],
+    user: {},
     loading: false,
     alertConfig: null,
   };
 
-  searchUser = async user => {
+  searchUsers = async user => {
     this.setState({ loading: true });
     const users = await fetchUsers(user);
     this.setState({ users, loading: false });
+  };
+
+  getUser = async username => {
+    this.setState({ loading: true });
+    const user = await fetchUserInformation(username);
+    this.setState({ user, loading: false });
   };
 
   clearUsers = () => {
@@ -32,7 +40,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { users, loading, alertConfig } = this.state;
+    const { users, user, loading, alertConfig } = this.state;
 
     return (
       <Router>
@@ -47,7 +55,7 @@ class App extends React.Component {
                 render={props => (
                   <Fragment>
                     <Search
-                      onSubmit={this.searchUser}
+                      onSubmit={this.searchUsers}
                       clearUsers={this.clearUsers}
                       showClear={users.length > 0}
                       setAlert={this.setAlertConfig}
@@ -57,6 +65,18 @@ class App extends React.Component {
                 )}
               />
               <Route exact path='/about' component={About} />
+              <Route
+                exact
+                path='/user/:login'
+                render={props => (
+                  <User
+                    {...props}
+                    getUser={this.getUser}
+                    user={user}
+                    loading={loading}
+                  />
+                )}
+              />
             </Switch>
           </div>
         </div>
