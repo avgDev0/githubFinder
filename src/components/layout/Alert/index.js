@@ -1,19 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import React, { useContext } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import AlertContext from "../../../context/alert/alertContext";
 
-const Alert = ({ config }) => {
+const Alert = () => {
+  const { alert } = useContext(AlertContext);
   return (
-    config !== null && (
-      <div className={`alert alert-${config.type}`}>
-        <FontAwesomeIcon icon={faInfoCircle} /> {config.msg}
+    alert !== null && (
+      <div className="alert alert-ligth">
+        <FontAwesomeIcon icon={faInfoCircle} /> {alert}
       </div>
     )
   );
 };
 
-Alert.propTypes = {
-  config: PropTypes.object,
-};
 export default Alert;
