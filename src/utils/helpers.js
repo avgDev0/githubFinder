@@ -1,39 +1,46 @@
-import axios from 'axios';
+import axios from "axios";
 
-const buildFetchURL = (user = '', singleUserFetch, reposFetch) => {
-  const urlParts = ['users'];
+const buildFetchURL = (user = "", singleUserFetch, reposFetch) => {
+  const urlParts = ["users"];
+
   const params = {
-    client_id: process.env.REACT_APP_GITHUB_CLIENT_ID,
-    client_secret: process.env.REACT_APP_GITHUB_CLIENT_SECRET,
+    client_id:
+      process.env.NODE_ENV !== "production"
+        ? process.env.REACT_APP_GITHUB_CLIENT_ID
+        : process.env.GITHUB_CLIENT_ID,
+    client_secret:
+      process.env.NODE_ENV !== "production"
+        ? process.env.REACT_APP_GITHUB_CLIENT_SECRET
+        : process.env.GITHUB_CLIENT_SECRET,
   };
 
   if (singleUserFetch) {
     urlParts.push(user);
   } else if (reposFetch) {
     urlParts.push(user);
-    urlParts.push('repos');
-    params['per_page'] = '5';
-    params['sort'] = 'created:asc';
+    urlParts.push("repos");
+    params["per_page"] = "5";
+    params["sort"] = "created:asc";
   } else {
-    urlParts.push('search');
+    urlParts.push("search");
     urlParts.reverse();
-    params['q'] = user;
+    params["q"] = user;
   }
 
   const paramsString = Object.entries(params)
-    .map(param => param.join('='))
-    .join('&');
+    .map((param) => param.join("="))
+    .join("&");
 
-  return `https://api.github.com/${urlParts.join('/')}?${paramsString}`;
+  return `https://api.github.com/${urlParts.join("/")}?${paramsString}`;
 };
 
-export const fetchUsers = async user => {
+export const fetchUsers = async (user) => {
   let users = [];
   const { data } = await axios.get(buildFetchURL(user));
   users = data.items ?? data;
 
   if (users.length) {
-    users = users.map(user => ({
+    users = users.map((user) => ({
       id: user.id,
       login: user.login,
       avatarSrc: user.avatar_url,
@@ -44,13 +51,13 @@ export const fetchUsers = async user => {
   return users;
 };
 
-export const fetchUserInformation = async username => {
+export const fetchUserInformation = async (username) => {
   const { data } = await axios.get(buildFetchURL(username, true));
 
   return data;
 };
 
-export const fetchUserRepos = async username => {
+export const fetchUserRepos = async (username) => {
   const { data } = await axios.get(buildFetchURL(username, false, true));
 
   return data;
