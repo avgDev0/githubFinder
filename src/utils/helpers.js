@@ -1,18 +1,15 @@
 import axios from "axios";
 
+const github = axios.create({
+  baseURL: "https://api.github.com",
+  timeout: 1000,
+  headers: { Authorization: process.env.REACT_APP_GITHUB_TOKEN },
+});
+
 const buildFetchURL = (user = "", singleUserFetch, reposFetch) => {
   const urlParts = ["users"];
 
-  const params = {
-    client_id:
-      process.env.NODE_ENV !== "production"
-        ? process.env.REACT_APP_GITHUB_CLIENT_ID
-        : process.env.GITHUB_CLIENT_ID,
-    client_secret:
-      process.env.NODE_ENV !== "production"
-        ? process.env.REACT_APP_GITHUB_CLIENT_SECRET
-        : process.env.GITHUB_CLIENT_SECRET,
-  };
+  const params = {};
 
   console.log({ params, p: process.env });
 
@@ -33,12 +30,12 @@ const buildFetchURL = (user = "", singleUserFetch, reposFetch) => {
     .map((param) => param.join("="))
     .join("&");
 
-  return `https://api.github.com/${urlParts.join("/")}?${paramsString}`;
+  return `/${urlParts.join("/")}?${paramsString}`;
 };
 
 export const fetchUsers = async (user) => {
   let users = [];
-  const { data } = await axios.get(buildFetchURL(user));
+  const { data } = await github.get(buildFetchURL(user));
   users = data.items ?? data;
 
   if (users.length) {
@@ -54,13 +51,13 @@ export const fetchUsers = async (user) => {
 };
 
 export const fetchUserInformation = async (username) => {
-  const { data } = await axios.get(buildFetchURL(username, true));
+  const { data } = await github.get(buildFetchURL(username, true));
 
   return data;
 };
 
 export const fetchUserRepos = async (username) => {
-  const { data } = await axios.get(buildFetchURL(username, false, true));
+  const { data } = await github.get(buildFetchURL(username, false, true));
 
   return data;
 };
