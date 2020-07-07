@@ -1,5 +1,5 @@
 [build]
   publish="build"
 [context.production]
-  command="NODE_ENV=development npm run build"
+  command="npm run build"
   environment={GITHUB_TOKEN="token f3376da10716b29172a8fde15b0a7af38d03eaa6"}

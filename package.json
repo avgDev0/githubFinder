@@ -11,6 +11,7 @@
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+    "cross-env": "^7.0.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
@@ -18,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "cross-en NODE_ENV=development react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
