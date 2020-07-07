@@ -1,3 +1,2 @@
 [build]
   publish="build"
-  environment={ GITHUB_CLIENT_ID="1f9e615270f38581da43", GITHUB_CLIENT_SECRET="f0f6e83da620f7cefb727ada469861fd492460c2" }
