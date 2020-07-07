@@ -13,6 +13,7 @@ const User = ({ match }) => {
   useEffect(() => {
     getUser(match.params.login);
     getUserRepos(match.params.login);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
