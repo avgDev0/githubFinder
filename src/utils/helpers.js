@@ -3,7 +3,12 @@ import axios from "axios";
 const github = axios.create({
   baseURL: "https://api.github.com",
   timeout: 1000,
-  headers: { Authorization: process.env.REACT_APP_GITHUB_TOKEN },
+  headers: {
+    Authorization:
+      process.env.NODE_ENV === "production"
+        ? process.env.GITHUB_TOKEN
+        : process.env.REACT_APP_GITHUB_TOKEN,
+  },
 });
 
 const buildFetchURL = (user = "", singleUserFetch, reposFetch) => {
@@ -11,7 +16,7 @@ const buildFetchURL = (user = "", singleUserFetch, reposFetch) => {
 
   const params = {};
 
-  console.log({ params, p: process.env });
+  console.log({ p: process.env });
 
   if (singleUserFetch) {
     urlParts.push(user);
