@@ -14,6 +14,8 @@ const buildFetchURL = (user = "", singleUserFetch, reposFetch) => {
         : process.env.GITHUB_CLIENT_SECRET,
   };
 
+  console.log({ params, p: process.env });
+
   if (singleUserFetch) {
     urlParts.push(user);
   } else if (reposFetch) {
